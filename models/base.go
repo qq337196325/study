@@ -3,7 +3,6 @@ package models
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -23,7 +22,7 @@ func (db *Mongodb) NewMongo() {
 	// 建立客户端连接
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
-		log.Fatal(err)
+		// log.Fatal(err)
 		fmt.Println(err)
 		return
 	}
@@ -31,7 +30,7 @@ func (db *Mongodb) NewMongo() {
 	// 检查连接情况
 	err = client.Ping(context.TODO(), nil)
 	if err != nil {
-		log.Fatal(err)
+		// log.Fatal(err)
 		fmt.Println(err)
 		return
 	}

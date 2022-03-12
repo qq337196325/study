@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"study/models"
 	_ "study/routers"
 
@@ -10,11 +9,12 @@ import (
 
 func main() {
 	MongodbObj := &models.Mongodb{}
-	MongodbObj.NewMongo()
+	go MongodbObj.NewMongo()
 
-	// models.AddUser()
-	models.DeleteOneUser()
-	// fmt.Println(err)
-	fmt.Println("Connected to MongoDB!")
+	// orm.RegisterDataBase("default", "mysql", "root:123456@tcp(127.0.0.1:3306)/beego?charset=utf8")
+
+	// go models.Consumers()
+	// models.Producer()
+
 	beego.Run()
 }
