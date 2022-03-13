@@ -17,4 +17,5 @@ func init() {
 	//MongoDB操作
 	beego.Router("/mongo/install", &controllers.MongoController{}, "get:Install")
 	beego.Router("/mongo/update", &controllers.MongoController{}, "get:Update")
+	beego.Router("/mongo/find", &controllers.MongoController{}, "get:Find")
 }
