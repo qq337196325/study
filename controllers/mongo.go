@@ -16,13 +16,17 @@ type MongoController struct {
 
 func (c *MongoController) Install() {
 	log := logs.NewLogger()
-	log.Debug("iuuuuuuuu")
 
 	Mdb := models.Mdb
 	UserRes := &models.User{Name: "小明", Email: "1234566@qq.com"}
-	Mdb.User.InsertOne(context.TODO(), UserRes)
+	_, err := Mdb.User.InsertOne(context.TODO(), UserRes)
+	if err != nil {
+		log.Debug("新增失败")
+		c.Ctx.WriteString("新增失败")
+		return
+	}
 
-	c.Ctx.WriteString("3333444")
+	c.Ctx.WriteString("新增一条数据成功")
 }
 
 func (c *MongoController) Update() {

@@ -9,10 +9,13 @@ import (
 )
 
 func main() {
-	MongodbObj := &models.Mongodb{}
-	go MongodbObj.NewMongo()
+	orm.Debug = true
 
-	orm.RegisterDataBase("default", "mysql", "root:123456@tcp(127.0.0.1:3306)/beego?charset=utf8")
+	//初始化Mongo与mysql
+	MongodbObj := &models.Mongodb{}
+	Mysql := &models.Mysql{}
+	go MongodbObj.NewMongo()
+	go Mysql.NewMysql()
 
 	// go models.Consumers()
 	// models.Producer()
