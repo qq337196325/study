@@ -7,6 +7,7 @@ import (
 
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/core/config"
+	"github.com/garyburd/redigo/redis"
 	_ "github.com/go-sql-driver/mysql"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -20,7 +21,8 @@ type Mongodb struct {
 }
 
 func (db *Mongodb) NewMongo() {
-	param := fmt.Sprintf("mongodb://127.0.0.1:27017")
+	mongodb_ip, _ := config.String("mongodb_ip")
+	param := fmt.Sprintf("mongodb://" + mongodb_ip + ":27017")
 	clientOptions := options.Client().ApplyURI(param)
 
 	// 建立客户端连接
@@ -89,4 +91,17 @@ func (m *Mysql) NewMysql() {
 		Deletetime: 33,
 	}
 	Ormer.Insert(user)
+}
+
+func NewRedis() {
+	redis_ip, _ := config.String("redis_ip")
+	c, err := redis.Dial("tcp", redis_ip+":6379")
+	if err != nil {
+		fmt.Println("conn redis failed,", err)
+		return
+	}
+
+	fmt.Println("redis conn success")
+
+	defer c.Close()
 }

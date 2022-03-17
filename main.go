@@ -17,6 +17,9 @@ func main() {
 	go MongodbObj.NewMongo()
 	go Mysql.NewMysql()
 
+	models.NewRedis()
+	// redis.Dial("tcp", "127.0.0.1:6379")
+
 	// go models.Consumers()
 	// models.Producer()
 
