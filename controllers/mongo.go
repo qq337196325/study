@@ -86,15 +86,21 @@ func (c *MongoController) Find() {
 
 	//根据ID查找
 	var user models.User
-	objectId, _ := primitive.ObjectIDFromHex("622c8c7fb8edf83bdd465a03")
-	filter := bson.M{"_id": objectId}
+	// objectId, _ := primitive.ObjectIDFromHex("622c8c7fb8edf83bdd465a03")
+	filter := bson.M{}
 	err := Mdb.User.FindOne(context.TODO(), filter).Decode(&user)
 	if err != nil {
 		c.Ctx.WriteString("查找一条数据失败\n")
-		return
+		// return
 	}
-
 	fmt.Printf("查询到得单条数据: %+v\n", user)
+
+	var user2 models.User
+	project := bson.M{"name": true}
+	projection := options.FindOne().SetProjection(project)
+	Mdb.User.FindOne(context.TODO(), bson.D{{}}, projection).Decode(&user2)
+	fmt.Printf("查询到得单条数据2: %+v\n", user2)
+	fmt.Printf("3333: %+v\n", projection)
 	c.Ctx.WriteString("查询到得单条数据\n")
 
 	//批量查找

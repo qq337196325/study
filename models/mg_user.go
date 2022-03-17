@@ -5,11 +5,13 @@ import (
 	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type User struct {
-	Name  string `json:"name"`  //NAMELOOKUP_TIME
-	Email string `json:"email"` //NAMELOOKUP_TIME
+	ObjectId primitive.ObjectID `bson:"_id" json:"_id"`
+	Name     string             `json:"name"`  //NAMELOOKUP_TIME
+	Email    string             `json:"email"` //NAMELOOKUP_TIME
 }
 
 //添加一条记录

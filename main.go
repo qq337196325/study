@@ -1,6 +1,7 @@
 package main
 
 import (
+	"study/grpc"
 	"study/models"
 	_ "study/routers"
 
@@ -18,6 +19,9 @@ func main() {
 	go Mysql.NewMysql()
 
 	models.NewRedis()
+
+	grpcServer := grpc.Server{}
+	go grpcServer.NewGrpcServer()
 	// 这里是test1分支
 	// redis.Dial("tcp", "127.0.0.1:6379")
 

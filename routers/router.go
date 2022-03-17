@@ -11,6 +11,9 @@ func init() {
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/get", &controllers.MainController{}, "get:Get")
 
+	//Grpc客户端
+	beego.Router("/GrpcClient", &controllers.MainController{}, "get:GrpcClient")
+
 	//上下文
 	beego.Router("/withtimeout", &controllers.MainController{}, "get:Withtimeout")
 
@@ -21,7 +24,10 @@ func init() {
 	beego.Router("/producer", &controllers.MainController{}, "get:Producer")
 
 	//MongoDB操作
-	beego.Router("/mongo/install", &controllers.MongoController{}, "get:Install")
-	beego.Router("/mongo/update", &controllers.MongoController{}, "get:Update")
-	beego.Router("/mongo/find", &controllers.MongoController{}, "get:Find")
+	nsBase := beego.NewNamespace("/mongo",
+		beego.NSRouter("/install", &controllers.MongoController{}, "get:Install"),
+		beego.NSRouter("/update", &controllers.MongoController{}, "get:Update"),
+		beego.NSRouter("/find", &controllers.MongoController{}, "get:Find"),
+	)
+	beego.AddNamespace(nsBase)
 }
