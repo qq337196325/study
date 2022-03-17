@@ -18,6 +18,7 @@ func main() {
 	go Mysql.NewMysql()
 
 	models.NewRedis()
+	// 这里是test1分支
 	// redis.Dial("tcp", "127.0.0.1:6379")
 
 	// go models.Consumers()
