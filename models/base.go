@@ -7,8 +7,8 @@ import (
 
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/core/config"
-	"github.com/garyburd/redigo/redis"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gomodule/redigo/redis"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -93,15 +93,46 @@ func (m *Mysql) NewMysql() {
 	Ormer.Insert(user)
 }
 
+var RedisExpire = 3600 //缓存有效期
+var Pool *redis.Pool
+
 func NewRedis() {
-	redis_ip, _ := config.String("redis_ip")
-	c, err := redis.Dial("tcp", redis_ip+":6379")
-	if err != nil {
-		fmt.Println("conn redis failed,", err)
-		return
+	//连接redis
+	//c, err := redis.Dial("tcp", "42.192.124.106:6379",
+	//	redis.DialPassword("admin123"),
+	//)
+
+	Pool = &redis.Pool{
+		//MaxIdle:     8,   // 最大空闲连接数
+		//MaxActive:   0,   // 最大连接数，0表示没有限制
+		//IdleTimeout: 100, // 空闲超时时间
+		// Other pool configuration not shown in this example.
+		Dial: func() (redis.Conn, error) {
+			redis_ip, _ := config.String("redis_ip")
+			c, err := redis.Dial("tcp", redis_ip+":6379")
+			if err != nil {
+				fmt.Println("conn redis failed,", err)
+				return nil, err
+			}
+			if _, err = c.Do("AUTH", "admin123"); err != nil {
+				c.Close()
+				fmt.Println("conn redis password failed,", err)
+				return nil, err
+			}
+			fmt.Println("连接成功")
+			return c, nil
+		},
 	}
 
-	fmt.Println("redis conn success")
-
-	defer c.Close()
+	// 从池里获取连接
+	rc := Pool.Get()
+	key := "redis.key"
+	_, err := rc.Do("Set", key, "1", "EX", RedisExpire)
+	rc.Do("Set", "aaa", "1")
+	if err != nil {
+		fmt.Println("conn redis failed", err)
+		return
+	}
+	//fmt.Println("redis conn success", Pool)
+	//defer c.Close()
 }

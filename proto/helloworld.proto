@@ -1,15 +1,18 @@
 syntax = "proto3";
 
-option go_package = "advanced_go/lesson06/proto/greeter";
+// option go_package = "study/proto";
 
+// 定义Greeter服务
 service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply) {}
 }
 
+// HelloRequest 请求结构
 message HelloRequest {
   string name = 1;
 }
 
+// HelloReply 响应结构
 message HelloReply {
   string message = 1;
 }

@@ -19,6 +19,7 @@ type Server struct {
 }
 
 func (s *Server) NewGrpcServer() {
+	//监听端口
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

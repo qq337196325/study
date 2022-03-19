@@ -30,4 +30,14 @@ func init() {
 		beego.NSRouter("/find", &controllers.MongoController{}, "get:Find"),
 	)
 	beego.AddNamespace(nsBase)
+
+	//Redis操作
+	reBase := beego.NewNamespace("/redis",
+		beego.NSRouter("/string", &controllers.RedisController{}, "get:Srt"),
+		beego.NSRouter("/hash", &controllers.RedisController{}, "get:Hash"),
+		beego.NSRouter("/list", &controllers.RedisController{}, "get:List"),
+		beego.NSRouter("/set", &controllers.RedisController{}, "get:Set"),
+		beego.NSRouter("/sset", &controllers.RedisController{}, "get:Sset"),
+	)
+	beego.AddNamespace(reBase)
 }
