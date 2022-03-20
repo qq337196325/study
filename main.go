@@ -25,8 +25,8 @@ func main() {
 	// 这里是test1分支
 	// redis.Dial("tcp", "127.0.0.1:6379")
 
-	// go models.Consumers()
-	// models.Producer()
+	go models.Consumers()
+	models.Producer()
 
 	beego.Run()
 }

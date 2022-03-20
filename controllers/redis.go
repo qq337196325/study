@@ -5,7 +5,9 @@ import (
 	"github.com/beego/beego/v2/core/logs"
 	beego "github.com/beego/beego/v2/server/web"
 	"github.com/gomodule/redigo/redis"
+	"strconv"
 	"study/models"
+	"time"
 )
 
 type RedisController struct {
@@ -67,7 +69,29 @@ func (c *RedisController) Srt() {
 //哈希操作
 func (c *RedisController) Hash() {
 	log := logs.NewLogger()
+	Pool := models.Pool
+	rc := Pool.Get()
+	defer rc.Close()
 
+	//int64转字符串
+	hkey := "test:hash:" + strconv.FormatInt(time.Now().Unix(), 10)
+	//设置哈希；
+	hash := map[string]string{"test1": "111test1", "test2": "2222test2"}
+	_, err := rc.Do("HMSET", redis.Args{}.Add(hkey).AddFlat(hash)...)
+	if err != nil {
+		log.Debug("新增失败")
+		return
+	}
+
+	//批量获取
+	resp, err := rc.Do("HGETALL", hkey)
+	if err != nil {
+		log.Debug("批量新增失败")
+		return
+	}
+	hashs, err := redis.StringMap(resp, err)
+
+	fmt.Println("批量获取的值map：", hashs)
 	log.Debug("新增失败")
 	c.Ctx.WriteString("批量新增数据成功\n")
 }
@@ -75,8 +99,20 @@ func (c *RedisController) Hash() {
 //列表操作
 func (c *RedisController) List() {
 	log := logs.NewLogger()
+	Pool := models.Pool
+	rc := Pool.Get()
+	defer rc.Close()
 
-	log.Debug("新增失败")
+	//int64转字符串
+	hkey := "test:hash:" + strconv.FormatInt(time.Now().Unix(), 10)
+	//设置哈希；
+	//keys := []string{"nn", "mm"}
+	_, err := rc.Do("lpush", "testpush", hkey)
+	if err != nil {
+		log.Debug("新增失败")
+		return
+	}
+
 	c.Ctx.WriteString("批量新增数据成功\n")
 }
 

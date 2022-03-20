@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/beego/beego/v2/core/config"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
@@ -16,8 +17,9 @@ func Consumers() {
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
+	kafka_ip, _ := config.String("kafka_ip")
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers":     "127.0.0.1", //broker,
+		"bootstrap.servers":     kafka_ip, //broker,
 		"broker.address.family": "v4",
 		"group.id":              "test-consumer-group", //group,
 		// "session.timeout.ms":    6000,

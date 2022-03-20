@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-
+	"github.com/beego/beego/v2/core/config"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
@@ -10,7 +10,8 @@ var Kafkap *kafka.Producer
 
 // 生产者
 func Producer() {
-	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "127.0.0.1"})
+	kafka_ip, _ := config.String("kafka_ip")
+	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": kafka_ip})
 
 	if err != nil {
 		panic(err)
