@@ -97,7 +97,7 @@ func (c *MongoController) Find() {
 
 	var user2 models.User
 	project := bson.M{"name": true}
-	projection := options.FindOne().SetProjection(project)
+	projection := options.FindOne().SetProjection(project)//查询指定字段
 	Mdb.User.FindOne(context.TODO(), bson.D{{}}, projection).Decode(&user2)
 	fmt.Printf("查询到得单条数据2: %+v\n", user2)
 	fmt.Printf("3333: %+v\n", projection)
